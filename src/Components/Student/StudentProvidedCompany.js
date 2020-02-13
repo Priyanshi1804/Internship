@@ -55,7 +55,10 @@ export default class StudentProvidedCompany extends Component {
                             cardElevation={5}
                             cardMaxElevation={5}
                             cornerRadius={5}
-                            style={styles.cardViewStyle}>                          
+                            style={styles.cardViewStyle}>
+
+
+                                                      
                   </CardView>
 
                 </View>

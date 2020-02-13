@@ -1,10 +1,46 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Button, Text, Alert,ImageBackground,Image,TouchableOpacity } from 'react-native';
-
+// import firebase from 'firebase';
 import Header from './Header';
+
+var firebase = require("firebase");
 
 export default class Login extends Component {
 
+
+componentWillMount(){
+
+  var firebaseConfig = {
+            apiKey: "AIzaSyDFE0pEomenVlB8-JuHcAnICYd3hQfRyOY",
+            authDomain: "internship-assistance.firebaseapp.com",
+            databaseURL: "https://internship-assistance.firebaseio.com",
+            projectId: "internship-assistance",
+            storageBucket: "internship-assistance.appspot.com",
+            messagingSenderId: "266860740596",
+            appId: "1:266860740596:web:56927c52040dd0d950c3a1",
+            measurementId: "G-SPJR93Z9XG"
+  };
+//   var config = {
+//     databaseURL: "https://internship-assistance.firebaseio.com",
+//     projectId: "internship-assistance",
+// };
+
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+    console.log("connection done..")
+}
+console.log("In the componentWillMount..")
+
+}
+ 
+ 
+// readUserData() {
+//     firebase.database().ref('internship-assistance/student-id').once('value', function (snapshot) {
+//         console.log(snapshot.val())
+//     });
+// }
+
+ 
 
 constructor() {
 super()
@@ -135,7 +171,7 @@ return (
               <TouchableOpacity
               activeOpacity = { 0.7 }
               style = { styles.btn }
-              onPress={this.FacultyLogin}>
+              onPress={this.readUserData}>
                     <Image
                         style={ styles.imgStyle }
                         source={require('../img/checked.png')}
