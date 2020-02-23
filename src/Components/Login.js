@@ -1,108 +1,49 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, Button, Text, Alert,ImageBackground,Image,TouchableOpacity } from 'react-native';
-// import firebase from 'firebase';
-import Header from './Header';
+import { StyleSheet, View, TextInput, Button, Text, Alert,ImageBackground,Image,TouchableOpacity} from 'react-native';
 
-var firebase = require("firebase");
+import Header from './Header';
+import * as firebase from 'firebase';
 
 export default class Login extends Component {
 
 
-componentWillMount(){
-
-  var firebaseConfig = {
-            apiKey: "AIzaSyDFE0pEomenVlB8-JuHcAnICYd3hQfRyOY",
-            authDomain: "internship-assistance.firebaseapp.com",
-            databaseURL: "https://internship-assistance.firebaseio.com",
-            projectId: "internship-assistance",
-            storageBucket: "internship-assistance.appspot.com",
-            messagingSenderId: "266860740596",
-            appId: "1:266860740596:web:56927c52040dd0d950c3a1",
-            measurementId: "G-SPJR93Z9XG"
-  };
-//   var config = {
-//     databaseURL: "https://internship-assistance.firebaseio.com",
-//     projectId: "internship-assistance",
-// };
-
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-    console.log("connection done..")
-}
-console.log("In the componentWillMount..")
-
-}
- 
- 
-// readUserData() {
-//     firebase.database().ref('internship-assistance/student-id').once('value', function (snapshot) {
-//         console.log(snapshot.val())
-//     });
-// }
-
- 
-
-constructor() {
-super()
-this.state = {
-local_id: '',
-local_password:'',
-}
+constructor(props) {
+super(props)
+this.state =( {
+email:'',
+password:' '
+})
 }
 
-FacultyLogin = () => {
-  console.log("In  the MainFunction..");
-  console.log("id:",this.state.local_id);
-  console.log("password:",this.state.local_password);
+focusNextField(nextField) {
+      this.refs[nextField].focus();
+    }
 
-    if(this.state.local_id =="Vidhi" && this.state.local_password =="vidhi123"){  
-      console.log("if condition..");
-      this.props.navigation.navigate('TeacherDashboard');  
+
+loginUser = (email,password) => {
+
+  try{
+    var user = firebase.auth().currentUser;    
+
+if (user != null) { 
+  if(user.emailVerified==true){
+    // alert("sucess..")
+     this.props.navigation.navigate('StudentDashboard')
+    .catch(error => Alert.alert("ERROR",error))
   }
   else{
-    this.props.navigation.navigate("StudentDashboard")
+   alert('First verify mail..')
   }
-};
-
-UserLoginFunction = () =>{
-  console.log("In the Login function..")
- 
- 
-fetch('http://192.168.137.185/cv/login.php', {
-  method: 'POST',
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
- 
-    id:this.state.local_id, 
-    password: this.state.local_password
-  })
- 
-}).then((response) => response.json())
-      .then((responseJson) => {
-         //console.log(responseJson);
-        // If server response message same as Data Matched
-       if(responseJson === 'Login')
-        {
-             console.log("Data mathched..");
-             this.props.navigation.navigate("StudentDashboard");
-            //Then open Profile activity and send user email to profile activity.
-            //this.props.navigation.navigate('Second', { Email: this.state.local_id });
-
-        }
-        else{
-
-          Alert.alert(responseJson);
-        }
-
-      }).catch((error) => {
-        //console.error(error);
-      });
- 
- 
+  
   }
+ }
+  
+  catch(error)
+  {
+    console.warn(error)
+    
+  }
+}
 
 
 
@@ -142,7 +83,7 @@ return (
                     placeholderTextSize="12"
                     keyboardType="default"                    
                     // selectionColor={'white'}
-                    onChangeText={enter_id => this.setState({local_id : enter_id})}
+                    onChangeText={(email) => this.setState({email})}
                     onSubmitEditing={() => this.focusNextField('3')}                   
                     
                    />
@@ -163,15 +104,15 @@ return (
                     placeholderTextSize="12"
                     keyboardType="default"
                     secureTextEntry={true}                    
-                    onChangeText={enter_password => this.setState({local_password : enter_password})}
-                    value = {this.state.password}
+                    onChangeText={(password)=>this.setState({password})}
+                   
                    />
                 </View>
               </View>
               <TouchableOpacity
               activeOpacity = { 0.7 }
               style = { styles.btn }
-              onPress={this.readUserData}>
+              onPress={()=> this.loginUser(this.state.email,this.state.password)}>
                     <Image
                         style={ styles.imgStyle }
                         source={require('../img/checked.png')}

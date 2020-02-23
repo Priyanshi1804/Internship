@@ -21,19 +21,23 @@ import TeacherRequestForm from './src/Components/Teacher/TeacherRequestForm';
 import TeacherhStudentStatus from './src/Components/Teacher/TeacherhStudentStatus';
 import TeacherCompanies from './src/Components/Teacher/TeacherCompanies';
 
-// import TeacherCompanies from './src/Components/Teacher/TeacherCompanies';
-// import BreakFast from './src/Components/BreakFast';
-// import Lunch from './src/Components/Lunch';
-// import Snacks from './src/Components/Snacks';
-// import Dinner from './src/Components/Dinner';
-// import MealPlanned from './src/Components/MealPlanned';
-// //import test from './src/Components/test'
-// import Home from  './src/Components/Home'
- //import StudentDashboard  from './src/Components/Student/StudentDashboard';
- //import test from './src/Components/Students/test';
+
+import * as firebase from 'firebase';
 
 
+// initialize firebbase
 
+const firebaseConfig = {
+
+    apiKey: "AIzaSyDFE0pEomenVlB8-JuHcAnICYd3hQfRyOY",
+    authDomain: "internship-assistance.firebaseapp.com",
+    databaseURL: "https://internship-assistance.firebaseio.com",
+    projectId: "internship-assistance",
+    storageBucket: "internship-assistance.appspot.com",
+         
+
+};
+firebase.initializeApp(firebaseConfig);
 const RootStack = createStackNavigator(
   {
      //screens
@@ -58,7 +62,7 @@ const RootStack = createStackNavigator(
    },
   {
     //Run First
-    initialRouteName: 'Registration',
+    initialRouteName: 'Login',
     headerMode: 'none',
   }
 );

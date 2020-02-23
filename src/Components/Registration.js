@@ -7,33 +7,83 @@ import {
   StyleSheet,
   ImageBackground,
   TouchableOpacity,
-  Text
+  Text,
+  Alert
 } from 'react-native'
 import Header from './Header'
 import ModalDropdown from 'react-native-modal-dropdown';
+import * as firebase from 'firebase';
+import Login from './Login';
 
 export default class SignUp extends React.Component {
-  state = {
-    username: '', password: '', email: '', phone_number: '',institute:'',year:''
-  }
-  onChangeText = (key, val) => {
-    this.setState({ [key]: val })
-  }
-  signUp = async () => {
-    const { username, password, email, phone_number } = this.state
-    try {
-      // here place your signup logic
-      console.log('user successfully signed up!: ', success)
-    } catch (err) {
-      console.log('error signing up: ', err)
+
+  constructor(props) {
+    super(props)
+    this.state =( {
+    email:'',
+    password:' ',
+    username:'',
+    studentId:'',
+    year:'',
+    institute: ''
+    })
     }
-  }
- 
+    
+    async signUpUser(email,password) {
+    try{
+      if(this.state.password.length<6)
+      {
+        alert("please enter atleast 6 characters ")
+        return;
+      }
+        
+       /*firebase.auth().createUserWithEmailAndPassword(email,password)
+       Alert.alert("user creaed")
+      
+       console.log("USER:",user)
+
+        user.sendEmailVerification().then(function() {
+           Alert.alert("check mail..")  
+         }).catch(function(error) {
+            Alert.alert("error..") // An error happened.
+});      */
+          await  firebase.auth().createUserWithEmailAndPassword(email,password)                       
+              //If a user is successfully created with an appropriate email
+            var user = firebase.auth().currentUser
+            if (firebase.auth().currentUser != null){
+              user.sendEmailVerification();
+              Alert.alert("check mail..")
+            }
+           
+            else{
+              Alert.alert("error..")
+            }
+           
+        }
+    catch(error)
+    {
+      console.log(error.toString())
+    }
+    }
+      writeUserData=(email,studentId,username,institute,year)=> {
+        var database = firebase.database(); 
+        firebase.database().ref('email'/+ studentId).set({
+        username: name,
+        email: email,
+        Year: year,
+        studentId:studentId,
+        institute:institute
+      });
+    }
+  
+
+
+    
   render() {
     return (
   <View style={styles.Maincontainer}>
      <Header
-        headerText = "Registration"
+         headerText = "Registration"
         onPressBack = {() => this.props.navigation.navigate("Login")}
       /> 
     <ImageBackground source={require('../img/dash.jpg')} style={{width: '100%', height: '100%',alignItems:'center'}}>
@@ -46,7 +96,7 @@ export default class SignUp extends React.Component {
           placeholder='Email'
           autoCapitalize="none"
           placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('email', val)}
+          onChangeText={(email)=>this.setState({email})}
         />
         <TextInput
           style={styles.input}
@@ -54,21 +104,21 @@ export default class SignUp extends React.Component {
           secureTextEntry={true}
           autoCapitalize="none"
           placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('password', val)}
+          onChangeText={(password)=>this.setState({password})}
         />
         <TextInput
           style={styles.input}
           placeholder='ID'
           autoCapitalize="none"
           placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('id', val)}
+          onChangeText={(studentId)=>this.setState({studentId})}
         />
         <TextInput
           style={styles.input}
-          placeholder='Phone Number'
+          placeholder='Enter Name'
           autoCapitalize="none"
           placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('phone_number', val)}
+          onChangeText={(username)=>this.setState({username})}
         />
 
       <ModalDropdown 
@@ -80,7 +130,7 @@ export default class SignUp extends React.Component {
           dropdownTextStyle={styles.textStyle2}
           dropdownStyle={styles.dropContainer}
           showsVerticalScrollIndicator={true}
-          onChangeText={val => this.onChangeText('institute', val)}
+          onChangeText={(institute)=>this.setState(institute)}
           />
           <ModalDropdown 
           style={styles.input}       
@@ -91,11 +141,11 @@ export default class SignUp extends React.Component {
           dropdownTextStyle={styles.textStyle2}
           dropdownStyle={styles.dropContainer}
           showsVerticalScrollIndicator={true}
-          onChangeText={val => this.onChangeText('year', val)}
+          onChangeText={(year)=>this.year}
           />
 
           <TouchableOpacity  style = { styles.signup }  
-                            onPress={() => {this.signUp}}>   
+                            onPress={()=> this.signUpUser(this.state.email,this.state.password)}> 
                          
             <Text style = { styles.textStyle}>Sign Up</Text>
           </TouchableOpacity>
