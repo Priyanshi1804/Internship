@@ -12,6 +12,7 @@ import {
   ImageBackground,
   FlatList    
 } from 'react-native'
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 
@@ -23,7 +24,8 @@ export default class Header extends Component {
         <View style = { styles.headerView }>
         
           <Text style = { styles.txt }>{this.props.headerText}</Text>
-        </View>
+             <Icon name="ellipsis-vertical-outline" size={24} color="#ffffff" />
+          </View>
       </View>
     );
   }

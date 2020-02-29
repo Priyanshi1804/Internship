@@ -167,64 +167,28 @@ const options = {
 
 export default class StudentVerificationForm extends Component {
 
-handleSubmit = () => {
+handleSubmit=()=>{
     console.log("In the handlesubmit...");
 
-    const value = this._form.getValue();
-    console.log("value:",value);   
+    const formdetails = this._form.getValue();
+    console.log("value:",formdetails);   
 
-    if(value!=null){ 
+    if(formdetails!=null){ 
+      
+      {
+        firebase.database().ref('UsersList/').push(
+          {
+            formdetails
+        }).then((data)=>{
+            //success callback
+            console.log('data ' , data)
+        }).catch((error)=>{
+            //error callback
+            console.log('error ' , error)
+        })
+    }
 
-
-   fetch('http://192.168.43.170/cv/newform.php', {
-            method: 'POST',
-            headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            },
-body: JSON.stringify({
-jcname: value.cname,
-jcweb: value.cweb,
-jcadd:value.cadd,
-jne:value.noe,
-jnb:value.nob,
-jhad:value.hof,
-jcpn:value.ctname,
-jcpp:value.ctphn,
-jcpe:value.cemail,
-jhn:value.hname,
-jhp:value.hphn,
-jhe:value.hemail,
-jtech:value.tec,
-jcp:value.cp,
-jcc:value.clic,
-jhow:value.how,
-jrsn:value.reason,
-
-})
-}).then(console.log(JSON.stringify({
-jcname: value.cname,
-jcweb: value.cweb,
-jcadd:value.cadd,
-jne:value.noe,
-jnb:value.nob,
-jhad:value.hof,
-jcpn:value.ctname,
-jcpp:value.ctphn,
-jcpe:value.cemail,
-jhn:value.hname,
-jhp:value.hphn,
-})))
-    .then((response) => response.json())
-.then((responseJson) => {
-// Showing response message coming from server after inserting records.
-Alert.alert(responseJson);
-}).catch((error) => {
-console.error(error);
-});
-
-}
-    
+}   
 
   };
 

@@ -62,7 +62,7 @@ const RootStack = createStackNavigator(
    },
   {
     //Run First
-    initialRouteName: 'Login',
+    initialRouteName: 'StudentDashboard',
     headerMode: 'none',
   }
 );

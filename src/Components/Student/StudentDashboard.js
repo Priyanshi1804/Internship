@@ -24,7 +24,7 @@ class StudentDashboard extends Component {
    return (
      <View style={styles.container}>
        <Header
-        headerText = "DashBoard"        
+        headerText = "Dashboard"        
       /> 
       <ImageBackground source={require('../../img/dash.jpg')} style={{width: '100%', height: '100%',alignItems:'center'}}>
      <View style={styles.headContiner}> 

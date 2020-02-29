@@ -6,6 +6,7 @@ import * as firebase from 'firebase';
 import RNFetchBlob from 'react-native-fetch-blob'
 
 
+
 export default class StudentOfferLatter extends React.Component {
   constructor(props) {
     super(props);
@@ -75,7 +76,7 @@ export default class StudentOfferLatter extends React.Component {
     const uploadUri =this.state.singleFile.uri
     let uploadBlob = null
 
-    const pdfRef = firebase.storage().ref('offerLatter').child('image_001')
+    const pdfRef = firebase.storage().ref('UsersList')
       fs.readFile(uploadUri, 'base64')
         .then((data) => {
           return Blob.build(data, { type: `${mime};BASE64` })
