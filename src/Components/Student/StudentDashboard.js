@@ -1,5 +1,3 @@
-
-
 import React, { Component } from 'react'
 import {
   AppRegistry,
@@ -10,22 +8,40 @@ import {
   Image,
   Dimensions,
   ImageBackground,
-  FlatList    
+  FlatList,
+  Alert    
 } from 'react-native'
 import CardView from 'react-native-cardview' ;
-import Header from '../Header';
-//import  Icon from 'react-native-vector-icons'
+import HeaderArrow from '../HeaderArrow';
+
 
 
 class StudentDashboard extends Component { 
-  
- render() {
 
+
+ constructor(props) {
+    super(props);
+
+     Obj = new HeaderArrow();
+
+  }
+
+CallFunction=()=>{
+      Obj.handleLogout() ; 
+     }
+
+ render() {
+     
    return (
+    
      <View style={styles.container}>
-       <Header
-        headerText = "Dashboard"        
-      /> 
+       <HeaderArrow
+        headerText = "Dashboard"
+        onPressBack={()=>this.props.navigation.navigate('StudentDashboard')}       
+        onPressClose={this.CallFunction}
+        myNavigation = { this.props.navigation }
+      />
+
       <ImageBackground source={require('../../img/dash.jpg')} style={{width: '100%', height: '100%',alignItems:'center'}}>
      <View style={styles.headContiner}> 
       <View style={styles.Maincontainer}>
@@ -84,6 +100,8 @@ export default StudentDashboard;
 const styles = StyleSheet.create({
   container:{
     flex:1,
+
+    // flexDirection:'row'
   },
   Maincontainer:{
     height:'30%',

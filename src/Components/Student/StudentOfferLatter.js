@@ -6,6 +6,10 @@ import * as firebase from 'firebase';
 import RNFetchBlob from 'react-native-fetch-blob'
 
 
+const database = firebase.database();
+  var user = firebase.auth().currentUser;
+ 
+
 
 export default class StudentOfferLatter extends React.Component {
   constructor(props) {
@@ -13,6 +17,7 @@ export default class StudentOfferLatter extends React.Component {
     //Initialization of the state to store the selected file related attribute
     this.state = {
       singleFile: '',
+      url:'',
      
     };
   }
@@ -62,43 +67,63 @@ export default class StudentOfferLatter extends React.Component {
       }
       
     }
-    this.handleUpload();
+    
   };
 
 
-  handleUpload =(mime = 'application/pdf')=>{
-    
-    const Blob = RNFetchBlob.polyfill.Blob
-    const fs = RNFetchBlob.fs
-    window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
-    window.Blob = Blob
+    handleUpload = ( ) => {
+    console.warn('in the hu')
+    let user=firebase.auth().currentUser.uid;
+      const image = this.state.singleFile.uri
+      console.warn(user);
 
-    const uploadUri =this.state.singleFile.uri
-    let uploadBlob = null
+   
+      const Blob = RNFetchBlob.polyfill.Blob
+      const fs = RNFetchBlob.fs
+      window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+      window.Blob = Blob
+   
+      let name = this.state.singleFile.name
+      console.warn(name)
+      let uploadBlob = null
+      const imageRef = firebase.storage().ref('offerlater').child(name)
 
-    const pdfRef = firebase.storage().ref('UsersList')
-      fs.readFile(uploadUri, 'base64')
+      console.warn(imageRef)
+      let mime = 'application/pdf'
+      fs.readFile(image, 'base64')
         .then((data) => {
           return Blob.build(data, { type: `${mime};BASE64` })
-        })
-        .then((blob) => {
+      })
+
+      .then((blob) => {
           uploadBlob = blob
-          return pdfRef.put(blob, { contentType: mime })
+          return imageRef.put(blob, { contentType: mime })
         })
+        
         .then(() => {
           uploadBlob.close()
-          return pdfRef.getDownloadURL()
+          return imageRef.getDownloadURL()
         })
         .then((url) => {
-          resolve(url)
-        })
-        /*.catch((error) => {
-          reject(error)
-      })*/
-      Alert.alert("sucessful..")
+          // URL of the image uploaded on Firebase storage
+          
+          console.log(url);
+          console.warn(user);
 
+          firebase.database().ref('Student/'+ user).child('OfferLatter').set(
+            {
+              url
+          })
+
+          
+        })
+        .catch((error) => {
+          console.log(error);
+
+   
+        })  
+   
     }
-  
 
 
  
@@ -120,7 +145,7 @@ export default class StudentOfferLatter extends React.Component {
         </Text>
 
          <TouchableOpacity  style = { styles.signup }  
-                            onPress={()=> this.handleUpload}> 
+                            onPress={()=> this.handleUpload()}> 
                          
             <Text style = { styles.textStyle}>Upload</Text>
           </TouchableOpacity>

@@ -8,7 +8,10 @@ export default class Login extends Component {
 
 
 constructor(props) {
-super(props)
+super(props);
+console.ignoredYellowBox = [
+  'Setting a timer'
+ ];
 this.state =( {
 email:'',
 password:' '
@@ -18,12 +21,49 @@ password:' '
 focusNextField(nextField) {
       this.refs[nextField].focus();
     }
+CheckTextInputIsEmptyOrNot() {
+     // const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+     const { email }  = this.state;
+     let isValid = true;
+
+      // if(mobile ==='' && isValid){
+      //   isValid = false;
+      //   Alert.alert('Alert','Please enter fullName' );
+      // } else if (mobile.length !== 10 && isValid){
+      //   isValid = false;
+      //   Alert.alert('Alert','Please enter valid mobile number' );
+      // }
+
+      if(email === '')
+      {
+        isValid = false;
+        Alert.alert('Alert','Please enter email' );
+      }
+      /*else if (reg.test(email) === false) {
+        isValid = false;
+        Alert.alert('Alert','Please enter valid email' );
+      }*/
+      if(isValid) {
+        this.handleLogin();
+      }
+  }
+
+  handleLogin = () => {
+    const { email, password } = this.state
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() =>  this.props.navigation.replace('StudentDashboard'))
+      .catch(error => Alert.alert('Oops', 'Invalid credentials'))
+  }
 
 
-loginUser = (email,password) => {
+/*loginUser = (email,password) => {
 
+  
   try{
     var user = firebase.auth().currentUser;    
+    console.warn("user:",user)
 
 if (user != null) { 
   if(user.emailVerified==true){
@@ -44,9 +84,7 @@ if (user != null) {
     
   }
 }
-
-
-
+*/
 render() {
 return (
    <View style={styles.container}>
@@ -54,6 +92,7 @@ return (
         headerText = "Login"
         onPressBack = {() => this.props.navigation.navigate("Login")}
       /> 
+      
       <ImageBackground source={require('../img/dash.jpg')} style={{width: '100%', height: '100%',alignItems:'center'}}>
 
         
@@ -112,7 +151,7 @@ return (
               <TouchableOpacity
               activeOpacity = { 0.7 }
               style = { styles.btn }
-              onPress={()=> this.loginUser(this.state.email,this.state.password)}>
+              onPress={()=> this.CheckTextInputIsEmptyOrNot()}>
                     <Image
                         style={ styles.imgStyle }
                         source={require('../img/checked.png')}

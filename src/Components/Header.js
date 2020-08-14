@@ -24,7 +24,7 @@ export default class Header extends Component {
         <View style = { styles.headerView }>
         
           <Text style = { styles.txt }>{this.props.headerText}</Text>
-             <Icon name="ellipsis-vertical-outline" size={24} color="#ffffff" />
+             <Icon name='home' size={24} color="#ffffff" />
           </View>
       </View>
     );

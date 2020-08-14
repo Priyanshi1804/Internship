@@ -3,9 +3,13 @@ import {} from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack'
 
+
+
 import Splash from './src/Components/Splash';
 import Login from './src/Components/Login';
 import Registration from './src/Components/Registration';
+import config from './src/config';
+import HeaderArrow from './src/Components/HeaderArrow';
 
 //Student Modules
 import StudentDashboard  from './src/Components/Student/StudentDashboard';
@@ -20,30 +24,29 @@ import TeacherVerificationRequest from './src/Components/Teacher/TeacherVerifica
 import TeacherRequestForm from './src/Components/Teacher/TeacherRequestForm';
 import TeacherhStudentStatus from './src/Components/Teacher/TeacherhStudentStatus';
 import TeacherCompanies from './src/Components/Teacher/TeacherCompanies';
+import extendedVerification from './src/Components/Teacher/extendedVerification';
 
 
-import * as firebase from 'firebase';
-
-
-// initialize firebbase
-
-const firebaseConfig = {
-
-    apiKey: "AIzaSyDFE0pEomenVlB8-JuHcAnICYd3hQfRyOY",
-    authDomain: "internship-assistance.firebaseapp.com",
-    databaseURL: "https://internship-assistance.firebaseio.com",
-    projectId: "internship-assistance",
-    storageBucket: "internship-assistance.appspot.com",
-         
-
+import { YellowBox } from "react-native";
+import _ from "lodash";
+YellowBox.ignoreWarnings(["Setting a timer"]);
+const _console = _.clone(console);
+console.warn = (message) => {
+if (message.indexOf("Setting a timer") <= -1) {
+   _console.warn(message);
+   _console.log(message)
+}
 };
-firebase.initializeApp(firebaseConfig);
+
+
+
 const RootStack = createStackNavigator(
   {
      //screens
        Splash: { screen: Splash },
        Login: { screen: Login },
-       Registration: { screen: Registration },
+       Registration: { screen: Registration },    
+       HeaderArrow:{screen:HeaderArrow} ,  
        
        //Student Modules
        StudentDashboard:{screen:StudentDashboard},
@@ -58,21 +61,27 @@ const RootStack = createStackNavigator(
        TeacherRequestForm:{screen:TeacherRequestForm},
        TeacherhStudentStatus:{screen:TeacherhStudentStatus},
        TeacherCompanies:{screen:TeacherCompanies},
+       extendedVerification:{screen:extendedVerification},
+       
        // /TeacherCompanies:{screen:TeacherCompanies}
    },
   {
     //Run First
-    initialRouteName: 'StudentDashboard',
+    initialRouteName: 'TeacherVerificationRequest',
     headerMode: 'none',
   }
 );
 
+
  class App extends React.Component{
+  
   render(){
     return(
       <RootStack />
+
     );
   }
 }
+
 
 export default createAppContainer(RootStack);

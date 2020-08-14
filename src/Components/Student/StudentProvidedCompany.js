@@ -44,10 +44,8 @@ export default class StudentProvidedCompany extends Component {
         onPressBack = {() => this.props.navigation.navigate("StudentDashboard")}
       /> 
       <ImageBackground source={require('../../img/dash.jpg')} style={{width: '100%', height: '100%',alignItems:'center'}}>
-        <View style={styles.headContiner}>          
-          
-          <View style={styles.horizontal}>
-          </View>                      
+        <View style={styles.headContiner}>
+                             
           <View style={styles.Contain}>  
            
                 <View>
